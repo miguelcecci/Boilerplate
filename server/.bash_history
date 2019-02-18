@@ -152,3 +152,13 @@ php artisan migrate
 php artisan migrate
 php -S 0.0.0.0:8000 -t /test/app/public
 exit
+cd app/
+ls
+composer install
+code .
+exit
+php artisan migrate
+cd /test/app/
+php artisan migrate
+php artisan migrate
+exit
