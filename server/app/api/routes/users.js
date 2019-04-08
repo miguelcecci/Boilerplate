@@ -19,25 +19,42 @@ router.post('/register', (req, res, next) => {
         username: req.body.username,
         token: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
     });
-    user.save().then(result => {
-        console.log(result);
-    }).catch(
-        err => console.log(err)
-    );
-    res.status(201).json({
-        message: 'user created',
-        createdUser: user
-    });
+    User.findOne({ 'email':user.email }).exec().then(
+        doc => {
+            if(!!doc){
+                res.status(200).json({
+                    message: 'Email already in use.'
+                })
+            }else{
+                user.save().then(result => {
+                    console.log(result);
+                }).catch(
+                    err => console.log(err)
+                );
+                res.status(201).json({
+                    message: 'user created',
+                    createdUser: user
+                });
+            }
+        }
+    )
 });
 
 router.post('/login', (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    User.findOne(email)
+    User.findOne({ 'email':email, 'password':hash(password)})
     .exec()
     .then(doc => {
-        console.log(doc);
-        res.status(200).json(doc);
+        if(!!doc){
+            console.log(doc);
+            res.status(200).json(doc);
+        }else{
+            console.log(doc);
+            res.status(200).json({
+                message: "Wrong email or password."
+            });
+        }
     })
     .catch(err => {
         console.log(err);
