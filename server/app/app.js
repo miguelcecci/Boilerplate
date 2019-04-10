@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser'); //tirar isso aqui, ja vam no express
 
 const userRoutes = require('./api/routes/users');
+const adminRoutes = require('./api/routes/admins');
+const manageUsersRoutes = require('./api/routes/manageUsers');
 
 mongoose.connect(dbAddress, {useNewUrlParser: true});
 const db = mongoose.connection;
@@ -28,6 +30,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/users', userRoutes);
+app.use('/admin', adminRoutes);
+app.use('/manageUsers', manageUsersRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
@@ -43,6 +47,5 @@ app.use((error, req, res, next) => {
         }
     });
 });
-
 
 module.exports = app;
