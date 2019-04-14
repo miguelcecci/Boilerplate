@@ -1,3 +1,3 @@
 library boilerplate.globals;
 
-String defaultUrl = 'http://localhost:3000';
+String defaultUrl = 'http://192.168.0.10:3000';

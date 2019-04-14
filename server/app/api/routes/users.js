@@ -48,11 +48,17 @@ router.post('/login', (req, res, next) => {
     .then(doc => {
         if(!!doc){
             console.log(doc);
-            res.status(200).json(doc);
+            res.status(200).json({
+                status: true,
+                message: "Success.",
+                user: doc
+            });
         }else{
             console.log(doc);
             res.status(200).json({
-                message: "Wrong email or password."
+                status: false,
+                message: "Wrong email or password.",
+                user: {}
             });
         }
     })
