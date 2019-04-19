@@ -5,6 +5,8 @@ import '../../models/ResponseStatus.dart';
 import '../../services/services.dart';
 import '../../widgets/forms/register.dart';
 import '../../widgets/forms/login.dart';
+import '../../util/user.dart';
+import '../../data/globals.dart' as globals;
 
 class Login extends StatefulWidget {
   @override
@@ -23,7 +25,6 @@ class _LoginState extends State<Login> {
   String statusMessage = '';
   LoginForm loginForm = new LoginForm();
   RegisterForm registerForm = new RegisterForm();
-
 
   void _changeActivityIndicator() {
     setState(() {
@@ -105,6 +106,9 @@ class _LoginState extends State<Login> {
                         ResponseStatus aaaa = response[1];
                         if(aaaa.status){
                           _setStatusMessage(aaaa.message);
+                          storeUser(user);
+                          globals.user = user;
+                          Navigator.pop(context);
                         }else{
                           _setStatusMessage(aaaa.message);
                         }

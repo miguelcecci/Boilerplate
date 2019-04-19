@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 import 'screens/login/index.dart';
+import 'screens/main/index.dart';
 
-//class Routes {
-//  final routes = <String, WidgetBuilder>{
-//    '/Login': (BuildContext context) => new Login()
-//  };
-//
-//  Routes() {
-//    runApp(new MaterialApp(
-//      title: 'Flutter Demo',
-//      routes: routes,
-//      home: new Login(),
-//    ));
-//  }
-//}
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
-class Routes extends StatelessWidget {
+class Routes {
+  final routes = <String, WidgetBuilder>{
+    '/Login': (context) => new Login(),
+    '/Main' : (context) => new MainScreen(),
+  };
 
-  Widget build(BuildContext context) {
-    return new MaterialApp(
+  Routes() {
+    runApp(new MaterialApp(
       title: 'Boilerplate',
-      home: new Login(),
-    );
+      routes: routes,
+      navigatorObservers: [routeObserver],
+      home: new MainScreen(),
+    ));
   }
 }
+
+//class Routes extends StatelessWidget {
+//
+//  Widget build(BuildContext context) {
+//    return new MaterialApp(
+//      title: 'Boilerplate',
+//      home: new Login(),
+//    );
+//  }
+//}
