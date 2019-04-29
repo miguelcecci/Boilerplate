@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../models/User.dart';
 import '../../util/user.dart';
 import '../../routes.dart';
 import '../../data/globals.dart' as globals;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/User.dart';
 import '../../models/Auth.dart';
+import '../../models/Register.dart';
 import '../../models/ResponseStatus.dart';
 import '../../services/services.dart';
 import '../../widgets/forms/register.dart';
@@ -23,12 +24,13 @@ class _LoginState extends State<Login> {
   String button1value = 'Login';
   String button2value = 'Register';
   String statusMessage = '';
+  Color statusMessageColor = Colors.black;
   LoginForm loginForm = new LoginForm();
   RegisterForm registerForm = new RegisterForm();
 
-  void _changeActivityIndicator() {
+  void _changeActivityIndicator(bool status) {
     setState(() {
-      activityIndicator = !activityIndicator;
+      activityIndicator = status;
     });
   }
 
@@ -42,7 +44,7 @@ class _LoginState extends State<Login> {
         button1value = 'Login';
         button2value = 'Register';
       }else{
-        logoSize = 100;
+        logoSize = 80;
         fontSizeLogo = 22;
         button1value = 'Submit';
         button2value = 'Back';
@@ -57,16 +59,19 @@ class _LoginState extends State<Login> {
     return registerForm;
   }
 
-  void _setStatusMessage(String status){
+  void _setStatusMessage(String status, Color color){
     setState(() {
       statusMessage = status;
+      statusMessageColor = color;
     });
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new
+    WillPopScope(child:
+    Scaffold(
         body: Padding(
           padding: EdgeInsets.all(50.0),
           child: Column(
@@ -88,14 +93,15 @@ class _LoginState extends State<Login> {
                 ],
               ),
               _buildLoginRegister(),
-              Text(statusMessage),
+              Text(statusMessage,
+                  style: TextStyle(color: statusMessageColor)),
               RaisedButton(
                   onPressed: () async {
-                    _setStatusMessage('');
-                    _changeActivityIndicator();
+                    _setStatusMessage('', Colors.black);
+                    _changeActivityIndicator(true);
                     if(showLoginForm) {
                       if(loginForm.passwordField.text == '' || loginForm.emailField.text == ''){
-                        _setStatusMessage('Email or Password Field is Empty.');
+                        _setStatusMessage('Email or Password Field is Empty.', Colors.red);
                       }else{
                         List response = await postLogin(
                             body: Auth(
@@ -103,22 +109,54 @@ class _LoginState extends State<Login> {
                                 password: loginForm.passwordField.text)
                                 .toMap());
                         User user = response[0];
-                        ResponseStatus aaaa = response[1];
-                        if(aaaa.status){
-                          _setStatusMessage(aaaa.message);
+                        ResponseStatus response_data = response[1];
+                        if(response_data.status){
+                          _setStatusMessage(response_data.message, Colors.green);
                           storeUser(user);
                           globals.user = user;
                           Navigator.pop(context);
                         }else{
-                          _setStatusMessage(aaaa.message);
+                          _setStatusMessage(response_data.message, Colors.red);
                         }
-
                       }
                     }else{
+                      bool formstatus = true;
+                      if(registerForm.passwordField.text != registerForm.passwordConfirmationField.text){
+                        _setStatusMessage('Passwords do not match.', Colors.red);
+                        formstatus = false;
+                      }
+                      if(registerForm.passwordField.text == ''){
+                        _setStatusMessage('Password field is empty.', Colors.red);
+                        formstatus = false;
+                      }
+                      if(registerForm.usernameField.text == ''){
+                        _setStatusMessage('Username field is empty.', Colors.red);
+                        formstatus = false;
+                      }
+                      if(registerForm.emailField.text == ''){
+                        _setStatusMessage('Email field is empty.', Colors.red);
+                        formstatus = false;
+                      }
+                      if(formstatus){
+                        ResponseStatus response = await postRegister(
+                            body: Register(
+                                email: registerForm.emailField.text,
+                                username: registerForm.usernameField.text,
+                                password: registerForm.passwordField.text)
+                                .toMap());
+                        if(response.status){
+                          _setStatusMessage(response.message, Colors.green);
+                          registerForm.usernameField.clear();
+                          registerForm.emailField.clear();
+                          registerForm.passwordField.clear();
+                          registerForm.passwordConfirmationField.clear();
+                        }else{
+                          _setStatusMessage(response.message, Colors.red);
+                        }
+                      }
 
                     }
-                    _changeActivityIndicator();
-//                    print(user.toMap());
+                    _changeActivityIndicator(false);
                   },
                   textColor: Colors.white,
                   color: Theme.of(context).accentColor,
@@ -135,6 +173,7 @@ class _LoginState extends State<Login> {
                   child: CircularProgressIndicator()),
             ],
           ),
-        ));
+        ))
+        , onWillPop: () async => false);
   }
 }

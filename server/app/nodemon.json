@@ -1,7 +1,14 @@
 {
     "env": {
-        "PORT":3000,
+        "PORT":4000,
         "ACCESS_ORIGIN":"*",
-        "ACCESS_HEADERS":"*"
+        "ACCESS_HEADERS":"*",
+
+        "DB":{
+            "ADDRESS":"localhost",
+            "PORT":"27017",
+            "NAME":"test"
+        }
     }
+    
 }

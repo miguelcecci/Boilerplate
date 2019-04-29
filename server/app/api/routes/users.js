@@ -23,7 +23,8 @@ router.post('/register', (req, res, next) => {
         doc => {
             if(!!doc){
                 res.status(200).json({
-                    message: 'Email already in use.'
+                    message: 'Email already in use.',
+                    status: false
                 })
             }else{
                 user.save().then(result => {
@@ -32,7 +33,8 @@ router.post('/register', (req, res, next) => {
                     err => console.log(err)
                 );
                 res.status(201).json({
-                    message: 'user created',
+                    message: 'User Created',
+                    status: true,
                     createdUser: user
                 });
             }

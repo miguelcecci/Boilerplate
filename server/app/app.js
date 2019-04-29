@@ -1,4 +1,6 @@
-const dbAddress = 'mongodb://localhost:27017/test'
+// const dbAddress = 'mongodb://'+process.env.DB.ADRESS+':'+process.env.DB.PORT+'/'+process.env.DB.NAME
+const dbAddress = 'mongodb://127.0.0.1:27017/test'
+console.log(">Conecting to database "+dbAddress);
 const accessOrigin = '*'
 const accessHeaders = '*'
 
@@ -6,13 +8,18 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser'); //tirar isso aqui, ja vam no express
+const bodyParser = require('body-parser'); //tirar isso aqui, ja vem no express
 
 const userRoutes = require('./api/routes/users');
 const adminRoutes = require('./api/routes/admins');
 const manageUsersRoutes = require('./api/routes/manageUsers');
 
-mongoose.connect(dbAddress, {useNewUrlParser: true});
+mongoose.connect(dbAddress, {useNewUrlParser: true}).then(() => {
+    console.log("Connected to Database");
+    }).catch((err) => {
+        console.log("Database ERROR! ", err);
+});
+
 const db = mongoose.connection;
 
 app.use(morgan('dev'));

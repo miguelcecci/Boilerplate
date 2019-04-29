@@ -18,7 +18,6 @@ class RegisterForm extends StatelessWidget {
         TextField(
           controller: usernameField,
           decoration: InputDecoration(hintText: 'Username'),
-          obscureText: true,
         ),
         TextField(
           controller: passwordField,
