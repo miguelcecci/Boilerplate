@@ -1,8 +1,10 @@
-// const dbAddress = 'mongodb://'+process.env.DB.ADRESS+':'+process.env.DB.PORT+'/'+process.env.DB.NAME
-const dbAddress = 'mongodb://127.0.0.1:27017/test'
+const YAML = require('yaml');
+const fs = require('fs');
+const dbconf = YAML.parse(fs.readFileSync('./dbconf.yaml', 'utf8'));
+const dbAddress = 'mongodb://'+dbconf.address+':'+dbconf.port+'/'+dbconf.name;
 console.log(">Conecting to database "+dbAddress);
-const accessOrigin = '*'
-const accessHeaders = '*'
+const accessOrigin = '*';
+const accessHeaders = '*';
 
 const express = require('express');
 const app = express();

@@ -1,0 +1,5 @@
+#rename to dbconf.yaml
+
+address: 0.0.0.0
+port: 27017
+name: test

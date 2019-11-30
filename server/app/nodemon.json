@@ -5,7 +5,7 @@
         "ACCESS_HEADERS":"*",
 
         "DB":{
-            "ADDRESS":"localhost",
+            "ADDRESS":"0.0.0.0",
             "PORT":"27017",
             "NAME":"test"
         }
